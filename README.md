@@ -6,6 +6,14 @@ Local project to demo a time-sliced execution vault with an agent.
 
 [Demo video](https://vimeo.com/1127653713?fl=ip&fe=ec)
 
+### Implementation Summary
+
+- **`src/Twap.sol`**: TWAP vault that executes time-sliced ERC20 swaps via a DEX adapter with oracle-guarded min-out and price-deviation checks, tracking slice completion and emitting Fill/OrderStatus.
+- **`agent/main.go`**: Go CLI agent that reads on-chain strategy, monitors headers and events over WS, and submits eligible `executeSlice` transactions.
+- **Tests (`test/…`)**: Foundry tests cover configuration/pausing, schedule guards, double-execution protection, slippage/deviation checks, cancel+sweep, and full TWAP completion.
+- **`src/interfaces/IDexAdapter.sol`**: Minimal swap interface the vault calls to execute trades, returning filled input, received output, and fee.
+- **`src/interfaces/IOracle.sol`**: Simple price oracle interface returning a quote used for slippage and deviation guards.
+
 ### Build contracts
 
 - `forge build`
