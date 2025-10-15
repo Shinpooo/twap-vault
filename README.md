@@ -4,7 +4,7 @@ Local project to demo a time-sliced execution vault with an agent.
 
 ### Demo
 
-[Demo video](assets/demo.mov)
+[Demo video](https://vimeo.com/1127653713?fl=ip&fe=ec)
 
 ### Build contracts
 
