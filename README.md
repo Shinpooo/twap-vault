@@ -45,19 +45,15 @@ In another terminal window:
   - The previoulsy running agent will pick up the new schedule automatically.
 
 - Use preflight mode to have information on the next slice to execute
-- `./agent/twap-agent --rpc ws://127.0.0.1:8545 --contract "$VAULT_ADDRESS" --chain-id 31337 --mode preflight`
+  - `./agent/twap-agent --rpc ws://127.0.0.1:8545 --contract "$VAULT_ADDRESS" --chain-id 31337 --mode preflight`
 
 ### Assumptions and limitations
 
 - Price reference is set as the oracle price at configuration time.
-- The adapter respects `minOut` and reports real filled/received amounts and a fee value. The vault grants per‑slice, exact allowances (approve 0 → approve amount). For negative testing, the mock adapter supports tweaking `setOutBps(...)` and `setFeeBps(...)`.
 - Slice completion is tracked via a simple `mapping(uint256 => bool)` (sliceId → done) for clarity. A bitmap would be more gas‑efficient but is omitted here for simplicity.
 - The agent submits legacy (type‑0) transactions using `gasPrice` (no EIP‑1559).
 - If `(end - start) < N`, the per‑slice interval can be zero, making all slices eligible at `startTime`.
 - No ReentrancyGuard usage. Reentrancy attack can only happen if agent = adapter. Conditions are set in a way this cannot happen.
-- ERC20 ops use IERC20 directly (not SafeERC20). Non‑standard tokens that do not return booleans may be incompatible.
-- Reconfiguring clears `sliceDone` in a loop up to N; extremely large N could make `configureStrategy` costly. A future improvement is using a bitmap to avoid clearing.
-- The “fee” is informational accounting only; the vault does not collect venue fees separately. Owner can recover balances via `sweep`.
 - The agent is WS‑only RPC. Can be extended later to http as a fallback.
 - ETH trading is not supported. `tokenIn` and `tokenOut` must be ERC20 addresses (non‑zero). The vault’s `sweep(address(0), to)` exists only to recover accidentally sent ETH.
 - Time window behavior — interval is computed as floor division of `(endTime - startTime)` by total slices. If the window is too short relative to the number of slices, multiple slices can become eligible at the same time (interval can be 0). The vault only enforces a per‑slice earliest schedule (≥ scheduled time) and does not enforce an upper bound at `endTime`. Operationally, the execution after `endTime` is still permitted by the contract.
