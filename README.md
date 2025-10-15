@@ -23,10 +23,10 @@ Local project to demo a time-sliced execution vault with an agent.
 - `forge test`
 
 
-### Local Run (Anvil)
+### Local Run instructions (Anvil)
 
 
-- In a first terminal window, start Anvil (with 1 block every second)
+In a first terminal window, start Anvil (with 1 block every second)
   - `anvil -p 8545 --block-time 1`
 
 In another terminal window:
