@@ -2,6 +2,10 @@
 
 Local project to demo a time-sliced execution vault with an agent.
 
+### Demo
+
+[Demo video](assets/demo.mov)
+
 ### Build contracts
 
 - `forge build`
